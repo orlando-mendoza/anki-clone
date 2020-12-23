@@ -1,7 +1,10 @@
-q(ns grok.db.core
+(ns grok.db.core
   (:require
    [datomic.client.api :as d]
+   [config.core :refer [env]]
    [grok.db.schema :refer [schema]]))
+
+(:database-uri env)
 
 ;; the config
 (def cfg {:server-type :peer-server

@@ -3,3 +3,7 @@
 .#deps.edn
 .nrepl-port
 server.iml
+.calva/output-window/output.calva-repl
+.calva/output-window/.clj-kondo/config.edn
+env/.DS_Store
+.DS_Store
