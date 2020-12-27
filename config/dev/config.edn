@@ -1,1 +1,5 @@
-{:database-uri "test"}
+{:database-cfg {:server-type        :peer-server
+                :access-key         "myaccesskey"
+                :secret             "mysecret"
+                :endpoint           "localhost:8998"
+                :validate-hostnames false}}

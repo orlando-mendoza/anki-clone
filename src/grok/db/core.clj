@@ -4,16 +4,8 @@
    [config.core :refer [env]]
    [grok.db.schema :refer [schema]]))
 
-(:database-uri env)
-
-;; the config
-(def cfg {:server-type :peer-server
-          :access-key "myaccesskey"
-          :secret "mysecret"
-          :endpoint "localhost:8998"
-          :validate-hostnames false})
 ;; the client
-(def client (d/client cfg))
+(def client (d/client (:database-cfg env)))
 
 ;; the connection
 (def conn (d/connect client {:db-name "grok"}))

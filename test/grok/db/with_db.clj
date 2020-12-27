@@ -6,9 +6,10 @@
 (def ^:dynamic *conn* nil)
 
 (defn create-conn [db-uri]
-  (d/create-database db-uri)
-  (let [conn (d/connect db-uri)]
-    conn))
+  (when db-uri
+    (d/create-database db-uri)
+    (let [conn (d/connect db-uri)]
+      conn)))
 
 (defn fresh-db []
   (let [db-uri (str "datomic:mem://" (gensym))
