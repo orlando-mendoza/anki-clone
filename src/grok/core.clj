@@ -1,5 +1,4 @@
 (ns grok.core)
 
 (defn -main []
-      (println "Hello grok"
-        ))
+      (println "Hello grok"))

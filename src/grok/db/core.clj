@@ -1,18 +1,21 @@
 (ns grok.db.core
   (:require
-   [datomic.client.api :as d]
+   [datomic.api :as d]
    [config.core :refer [env]]
    [grok.db.schema :refer [schema]]))
 
-;; the client
-(def client (d/client (:database-cfg env)))
+(defn create-conn [db-uri]
+  (when db-uri
+    (d/create-database db-uri)
+    (let [conn (d/connect db-uri)]
+      conn)))
 
 ;; the connection
-(def conn (d/connect client {:db-name "grok"}))
+(def conn (create-conn (:database-uri env)))
 
 ;; ------------------------------------------------------------
 ;; Create schema and transact into the database
-(def tx (d/transact conn {:tx-data schema}))
+(def tx @(d/transact conn schema))
 
 
 

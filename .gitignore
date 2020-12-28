@@ -1,4 +1,6 @@
 .idea/
+.clj-kondo/
+.lsp/
 .cpcache/
 .#deps.edn
 .nrepl-port
