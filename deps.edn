@@ -9,6 +9,6 @@
            :dev    {:extra-paths ["config/dev" "env/dev"]}
 
            :test   {:extra-paths ["test" "config/test"]
-                    :extra-deps  {lambdaisland/kaocha           {:mvn/version "0.0-529"}
-                                  lambdaisland/kaocha-cloverage {:mvn/version "1.0.63"}}
+                    :extra-deps  {lambdaisland/kaocha           {:mvn/version "1.0-732"}
+                                  lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}}
                     :main-opts   ["-m" "kaocha.runner"]}}}

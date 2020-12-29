@@ -8,7 +8,7 @@
 
 (deftest user
   (testing "create!"
-    (let [user-params {:user/email "john@john.com"
+    (let [user-params {:user/email "john@gmail.com"
                        :user/password "password"}
           uid (SUT/create! *conn* user-params)]
       (is (not (nil? uid)))
