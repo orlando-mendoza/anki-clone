@@ -1,8 +1,7 @@
 (ns grok.db.with-db
-  (:require
-    [grok.db.schema :refer [schema]]
-    [datomic.api :as d]
-    [grok.db.core :as SUT]))
+  (:require    [grok.db.schema :refer [schema]]
+               [datomic.api :as d]
+               [grok.db.core :as SUT]))
 
 (def ^:dynamic *conn* nil)
 

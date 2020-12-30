@@ -1,14 +1,17 @@
 (ns grok.db.user
   (:require 
    [datomic.api :as d]
-   [clojure.string :as str]
-   [clojure.spec.alpha :as s]))
+   [clojure.spec.alpha :as s]
+   [clojure.test.check.generators :as gen ]))
 
 (defn validate-email [email]
   (let [email-regex #"^([a-zA-Z0-9_\.\-]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"]
     (re-matches email-regex email)))
 
-(s/def :user/email (s/and validate-email string?))
+(s/def :user/email 
+       (s/with-gen 
+        (s/and validate-email string?)
+        #(s/gen #{"john@gmail.com" "jane@gmail.com"})))
 (s/def :user/password (and string? #(> (count %) 7)))
 (s/def :user/username string?)
 (s/def :user/token string?)
