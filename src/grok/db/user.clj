@@ -27,7 +27,7 @@
          string?
          #(s/gen #{"abcdefg" "kaGLKdnas8631nF" "Hgt43ak9yG1"})))
 
-(s/def :user/id string?)
+(s/def :user/id uuid?)
 
 (s/def ::user
        (s/keys :req [:user/email :user/password]
