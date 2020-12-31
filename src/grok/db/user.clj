@@ -45,6 +45,7 @@
                     {:grok/error-id :validation
                      :error "Invalid email or password provided"}))))
 
+;; ------------------------------------------------------------
 ;; Fetch a user by ID
 
 (defn fetch
@@ -56,6 +57,20 @@
           :where
           [?uid :user/id ?user-id]]
         db user-id pattern)))
+
+;;------------------------------------------------------------
+;; Edit User by ID
+(defn edit!
+  [conn user-id user-params]
+  (if (fetch (d/db conn) user-id)
+    (let [tx-data (merge user-params {:user/id user-id})
+          db-after (:db-after @(d/transact conn [tx-data]))]
+      (fetch db-after user-id))
+    (throw (ex-info "Unable to update user"
+                    {:grok/error-id :server-error
+                     :error "Unable to update user"}))))
+
+
 
 ;; ------------------------------------------------------------------
 ;; comment

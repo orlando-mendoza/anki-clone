@@ -18,4 +18,8 @@
   (testing "fetch"
     (let [uid (SUT/create! *conn* (gen/generate (s/gen ::SUT/user)))
           user (SUT/fetch (d/db *conn*) uid)]
+      (is (= true (s/valid? ::SUT/user user)))))
+  (testing "edit"
+    (let [uid (SUT/create! *conn* (gen/generate (s/gen ::SUT/user)))
+          user (SUT/edit! *conn* uid {:user/username "edit.ed"})]
       (is (= true (s/valid? ::SUT/user user))))))
