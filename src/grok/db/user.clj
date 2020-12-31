@@ -70,6 +70,14 @@
                     {:grok/error-id :server-error
                      :error "Unable to update user"}))))
 
+;; ------------------------------------------------------------
+;; Detele User
+(defn delete!
+  [conn user-id]
+  (when-let [user (fetch (d/db conn) user-id)]
+    (d/transact conn [[:db/retractEntity [:user/id user-id]]])
+    user))
+
 
 
 ;; ------------------------------------------------------------------
