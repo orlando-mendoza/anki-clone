@@ -1,6 +1,12 @@
 (ns user
   (:require [mount.core :as mount]
+            [clojure.tools.namespace.repl :as tn]
             [grok.core]))
+
+(defn refresh-ns
+  "Refresh/reloads all namespaces"
+  []
+  (tn/refresh-all))
 
 (defn start
   "Mount starts lifecycle of running state"
@@ -15,6 +21,7 @@
 (defn restart-dev
   []
   (stop)
+  (refresh-ns)
   (start))
 
 (comment
