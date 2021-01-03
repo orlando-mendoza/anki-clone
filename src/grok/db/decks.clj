@@ -17,7 +17,13 @@
 (defn fetch
   "Fetch a single deck by ID"
   [db user-id deck-id]
-  nil)
+  (d/q '[:find (pull ?deck [*]) .
+         :in $ ?uid ?did
+         :where
+         [?user :user/id ?uid]
+         [?deck :deck/id ?did]
+         [?deck :deck/author ?user]]
+       db user-id deck-id))
 
 
 ;; - Create
