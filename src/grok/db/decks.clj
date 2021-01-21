@@ -31,7 +31,7 @@
 
 ;; - Read
 (defn fetch
-  "Fetch a single deck by ID"
+  "Fetch a single deck by ID, returns nil if not found"
   [db user-id deck-id]
   (d/q '[:find (pull ?deck [*]) .
          :in $ ?uid ?did
@@ -59,7 +59,15 @@
 ;; - Update
 (defn edit!
   "Edit an existing deck"
-  [conn user-id deck-id deck-params])
+  [conn user-id deck-id deck-params]
+  (if (fetch (d/db conn) user-id deck-id)
+    (let [tx-data (merge deck-params {:deck/id deck-id})
+          db-after (:db-after @(d/transact conn [tx-data]))]
+      (fetch db-after user-id deck-id))
+    (throw (ex-info "Unable to update deck"
+                    {:grok/error-id :server-error
+                     :error "Unable to update deck"}))))
+
 
 
 ;; - Delete
@@ -73,7 +81,7 @@
     {:deck/id (d/squuid)
      :deck/title "Learning Clojure"
      :deck/tags #{"Clojure" "Programming"}
-     :deck/author [:user/id #uuid "5fed0349-8bd5-491d-bb72-495e127fd7d7"] })
+     :deck/author [:user/id #uuid "5fed0349-8bd5-491d-bb72-495e127fd7d7"]})
 
   (def deck2
     {:deck/id (d/squuid)
