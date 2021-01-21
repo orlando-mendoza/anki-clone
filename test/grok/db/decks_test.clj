@@ -43,13 +43,18 @@
         (is (= true (nil? deck)))))
 
     (testing "create! - create a new deck"
-      (let [new-deck (gen/generate (s/gen ::SUT/deck))
-            deck-id (SUT/create! *conn* user-id new-deck)]
-        (is (uuid? deck-id))))
+     (let [new-deck (gen/generate (s/gen ::SUT/deck))
+           deck-id (SUT/create! *conn* user-id new-deck)]
+       (is (uuid? deck-id))))
 
     (testing "edit! - edit an existing deck"
       (let [new-deck (gen/generate (s/gen ::SUT/deck))
             deck-id (SUT/create! *conn* user-id new-deck)
             deck-params {:deck/title "Learning Datomic"}
             edited-deck (SUT/edit! *conn* user-id deck-id deck-params)]
-        (is (= (:deck/title deck-params) (:deck/title edited-deck)))))))
+        (is (= (:deck/title deck-params) (:deck/title edited-deck)))))
+    (testing "delete! - delete an existing deck"
+      (let [deck-id (SUT/create! *conn* user-id (gen/generate (s/gen ::SUT/deck)))
+            deck (SUT/delete! *conn* user-id deck-id)]
+        (is (= true (s/valid? ::SUT/deck deck)))
+        (is (= nil (SUT/fetch (d/db *conn*) user-id deck-id)))))))
