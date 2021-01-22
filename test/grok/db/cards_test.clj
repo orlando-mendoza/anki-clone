@@ -31,4 +31,18 @@
               card (first cards)]
           (is (seq cards))
           (is (s/valid? ::SUT/card card))
-          (is (vector? cards)))))))
+          (is (vector? cards)))))
+    
+    (testing "fetch - returns a card by ID"
+      (let [new-deck (merge (gen/generate (s/gen ::decks/deck)))
+            deck-id (decks/create! *conn* user-id new-deck)
+            card-id (d/squuid)
+            new-card {:card/id card-id
+                      :card/deck [:deck/id deck-ud]
+                      :card/front "What is Clojure"
+                      :card/back "A programming language"}]
+        @(d/transact *conn* [new-card])
+        (let [card (SUT/fetch (d/db *conn*) deck-id card-id)]
+          (is (s/valid? ::SUT/card cards)))))))
+
+

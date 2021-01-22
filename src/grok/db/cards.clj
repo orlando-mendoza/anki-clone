@@ -15,7 +15,7 @@
 
 ;; List - list all the cards belonging to a certain deck
 ;; [*] means fetch everything belonging to card entity
-(defn browse 
+(defn browse
   "list all the cards belonging to a certain deck"
   [db deck-id]
   (d/q '[:find [(pull  ?cards [*]) ...]
@@ -24,3 +24,15 @@
          [?deck :deck/id ?deck-id]
          [?cards :card/deck ?deck]]
        db deck-id))
+
+;; Read - Fetch a single card by ID 
+(defn fetch
+  "Fetch a single card by ID, return nil if not found"
+  [db deck-id card-id]
+  (d/q '[:find (pull ?card [*]) . 
+         :in $ ?deck-id ?card-id
+         :where
+         [?deck :deck/id ?deck-id]
+         [?card :card/id ?card-id]
+         [?card :card/deck ?deck]]
+       db deck-id card-id))
