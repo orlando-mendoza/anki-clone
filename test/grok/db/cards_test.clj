@@ -43,6 +43,15 @@
                       :card/back "A programming language"}]
         @(d/transact *conn* [new-card])
         (let [card (SUT/fetch (d/db *conn*) deck-id card-id)]
-          (is (s/valid? ::SUT/card card)))))))
+          (is (s/valid? ::SUT/card card)))))
+    
+    (testing "create! - Creates a new card and returns the card ID"
+      (let [new-deck (merge (gen/generate (s/gen ::decks/deck)))
+            deck-id (decks/create! *conn* user-id new-deck)
+            new-card {:card/deck [:deck/id deck-id]
+                      :card/front "What is Clojure"
+                      :card/back "A programming language"}
+            card-id (SUT/create! *conn* deck-id new-card)]
+        (is (uuid? card-id))))))
 
 

@@ -25,14 +25,29 @@
          [?cards :card/deck ?deck]]
        db deck-id))
 
-;; Read - Fetch a single card by ID 
+;; Read - Fetch a single card by ID
 (defn fetch
   "Fetch a single card by ID, return nil if not found"
   [db deck-id card-id]
-  (d/q '[:find (pull ?card [*]) . 
+  (d/q '[:find (pull ?card [*]) .
          :in $ ?deck-id ?card-id
          :where
          [?deck :deck/id ?deck-id]
          [?card :card/id ?card-id]
          [?card :card/deck ?deck]]
        db deck-id card-id))
+
+;; Create - create a new card
+(defn create!
+  "Create a new card"
+  [conn deck-id card-params]
+  (if (s/valid? ::card card-params)
+    (let [card-id (d/squuid)
+          tx-data (-> card-params
+                      (assoc :card/deck [:deck/id deck-id])
+                      (assoc :card/id card-id))]
+      (d/transact conn [tx-data])
+      card-id)
+    (throw (ex-info "Card is invalid"
+                    :grok-error-id :validation
+                    :error "Invalid card input values"))))
