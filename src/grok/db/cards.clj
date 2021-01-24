@@ -49,5 +49,18 @@
       (d/transact conn [tx-data])
       card-id)
     (throw (ex-info "Card is invalid"
-                    :grok-error-id :validation
-                    :error "Invalid card input values"))))
+                    {:grok-error-id :validation
+                     :error         "Invalid card input values"}))))
+
+
+;; Update - Update a card
+;; Ckeck if card with card-id and deck-id exists (uses fetch function)
+
+(defn edit!
+  "Edit an existing card"
+  [conn deck-id card-id card-params]
+  (when (fetch (d/db conn) deck-id card-id)
+    (let [tx-data (-> card-params
+                      (assoc :card/id card-id))
+          db-after (:db-after @(d/transact conn [tx-data]))]
+      (fetch db-after deck-id card-id))))
