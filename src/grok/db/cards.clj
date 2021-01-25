@@ -64,3 +64,9 @@
                       (assoc :card/id card-id))
           db-after (:db-after @(d/transact conn [tx-data]))]
       (fetch db-after deck-id card-id))))
+
+;; Delete - Delete a card
+(defn delete! [conn deck-id card-id]
+  (when-let [card (fetch (d/db conn) deck-id card-id)]
+    (d/transact conn [[:db/retractEntity [:card/id card-id]]])
+    card))
